@@ -6,12 +6,12 @@ namespace VoronoiDiagram
 {
     public static class CellUtilities
     {
-        public static List<Point> CreatePoints(Random rnd, int numberOfPoints, int width, int height)
+        public static List<Point> CreatePoints(Random rnd, int numberOfPoints, Size size)
         {
             var points = new List<Point>();
             for (int i = 0; i < numberOfPoints; i++)
             {
-                points.Add(new Point() { X = (int)(rnd.NextDouble() * width), Y = (int)(rnd.NextDouble() * height) });
+                points.Add(new Point() { X = (int)(rnd.NextDouble() * size.Width), Y = (int)(rnd.NextDouble() * size.Height) });
             }
             return points;
         }
@@ -44,7 +44,7 @@ namespace VoronoiDiagram
             }
         }
 
-        public static void CreateCell(Bitmap bitmap, List<Point> points, List<Color> colors)
+        public static void CreateCell(Bitmap bitmap, List<Point> points, List<Color> colors, Distance.GetDistance distance)
         {
             for (int hh = 0; hh < bitmap.Height; hh++)
             {
@@ -55,7 +55,7 @@ namespace VoronoiDiagram
                     for (int it = 0; it < points.Count; it++)
                     {
                         var p = points[it];
-                        var d = GetDistance(p, new Point(ww, hh));
+                        var d = distance(p, new Point(ww, hh));
                         if (d < dist)
                         {
                             dist = d;
@@ -71,10 +71,6 @@ namespace VoronoiDiagram
             }
         }
 
-        private static double GetDistance(Point p1, Point p2)
-        {
-            return Math.Sqrt(Math.Pow((p2.X - p1.X), 2) + Math.Pow((p2.Y - p1.Y), 2));
-        }
 
     }
 
